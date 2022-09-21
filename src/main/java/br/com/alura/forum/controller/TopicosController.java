@@ -3,22 +3,22 @@ package br.com.alura.forum.controller;
 import java.util.Arrays;
 import java.util.List;
 
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
+import br.com.alura.forum.controller.dto.TopicoDto;
 import br.com.alura.forum.modelo.Curso;
 import br.com.alura.forum.modelo.Topico;
 
-@Controller
+@RestController //não precisa colocar mais o responsebody
 public class TopicosController {
 
 	@RequestMapping("/topicos")
-	@ResponseBody //anotação para dizer que não vou navegar em uma pagina
-	public List<Topico> lista(){
-		Topico topico = new Topico("Duvida", "Duvida com Spring", new Curso("Sping", "Programação"));
+	public List<TopicoDto> lista(){
+		Topico topico = new Topico("Dúvida", "Dúvida com Spring", new Curso("Sping", "Programação"));
 	
-		return Arrays.asList(topico, topico, topico);
+		return TopicoDto.converter(Arrays.asList(topico, topico, topico));
 		
 }
+	
 }
