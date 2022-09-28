@@ -2,6 +2,7 @@ package br.com.alura.forum.controller;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
@@ -58,24 +59,37 @@ public class TopicosController {
 	}
 	
 	@GetMapping("/{id}")//id dinamico 
-	public DetalhesDoTopicoDto detalhar(@PathVariable Long id) {
-		Topico topico = topicoRepository.getOne(id); //carregar no banco de dados.
-		return new DetalhesDoTopicoDto(topico);	
+	public ResponseEntity<DetalhesDoTopicoDto> detalhar(@PathVariable Long id) {
+		Optional<Topico> topico = topicoRepository.findById(id); //carregar no banco de dados.
+		if(topico.isPresent()) {
+		return ResponseEntity.ok(new DetalhesDoTopicoDto(topico.get()));	
+		}
+		
+		return ResponseEntity.notFound().build();
 	}
 	
 	@PutMapping("/{id}")
 	@Transactional //avisa pro spring comitar transação no final do metodo caso não ocorra uma exception, 
 	public ResponseEntity<TopicoDto> atualizar(@PathVariable Long id, @RequestBody @Valid AtualizacaoTopicoForm form ){
-		Topico topico = form.atualizar(id, topicoRepository);
+		Optional<Topico> optional = topicoRepository.findById(id); //carregar no banco de dados.
+		if(optional.isPresent()) {
+			Topico topico = form.atualizar(id, topicoRepository);
+			return ResponseEntity.ok(new TopicoDto(topico));	
+		}
 		
-		return ResponseEntity.ok(new TopicoDto(topico));
+		return ResponseEntity.notFound().build();
 	}
 	
 	@DeleteMapping("/{id}")
 	@Transactional
 	public ResponseEntity<?> remover(@PathVariable Long id){ //<?> é generic mas não sei qual é o tipo
-		topicoRepository.deleteById(id);
-		return ResponseEntity.ok().build();
+		Optional<Topico> optional = topicoRepository.findById(id);
+		if(optional.isPresent()) {
+			topicoRepository.deleteById(id);
+			return ResponseEntity.ok().build();
+		}
+		 
+		return ResponseEntity.notFound().build();
 	}
 	
 }
