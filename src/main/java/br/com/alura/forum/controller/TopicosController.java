@@ -43,7 +43,7 @@ public class TopicosController {
 	
 	@GetMapping
 	public Page<TopicoDto> lista(@RequestParam(required = false) String nomeCurso, 
-			@PageableDefault(sort = "id", direction = Direction.DESC) Pageable paginacao){
+			@PageableDefault(sort = "id", direction = Direction.DESC, page = 0, size = 10) Pageable paginacao){
 		//http://localhost:8080/topicos?page=0&size=10&sort=id,asc paginação mas simples
 		if(nomeCurso == null) {
 			Page<Topico> topicos = topicoRepository.findAll(paginacao);
