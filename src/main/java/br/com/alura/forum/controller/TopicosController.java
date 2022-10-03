@@ -80,6 +80,7 @@ public class TopicosController {
 	
 	@PutMapping("/{id}")
 	@Transactional //avisa pro spring comitar transação no final do metodo caso não ocorra uma exception, 
+	@CacheEvict(value = "listaDeTopicos", allEntries = true)
 	public ResponseEntity<TopicoDto> atualizar(@PathVariable Long id, @RequestBody @Valid AtualizacaoTopicoForm form ){
 		Optional<Topico> optional = topicoRepository.findById(id); //carregar no banco de dados.
 		if(optional.isPresent()) {
@@ -92,6 +93,7 @@ public class TopicosController {
 	
 	@DeleteMapping("/{id}")
 	@Transactional
+	@CacheEvict(value = "listaDeTopicos", allEntries = true)
 	public ResponseEntity<?> remover(@PathVariable Long id){ //<?> é generic mas não sei qual é o tipo
 		Optional<Topico> optional = topicoRepository.findById(id);
 		if(optional.isPresent()) {
