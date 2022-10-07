@@ -120,4 +120,9 @@ public class Usuario implements UserDetails {
 		return true;
 	}
 
+	public Collection<? extends GrantedAuthority> getPerfis() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
